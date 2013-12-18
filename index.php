@@ -1,3 +1,10 @@
+<?php
+    if (isset($_REQUEST['crontab']) && $_REQUEST['crontab'] != '') {
+        require_once('./lib/PrettyCron.php');
+        $prettyCron = new PrettyCron($_REQUEST['crontab']);
+    }
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -23,19 +30,49 @@
         <h3 class="text-muted">Pretty Cron</h3>
       </div>
 
-        <br/>
+      <br/>
 
       <div class="jumbotron">
         <h1>Visualize Your Cron</h1>
         <p class="lead">Paste your crontab and hit visualize.</p>
-
-        <textarea style="height:200px;" class="form-control"></textarea>
-        <br/>
-        <p style="float:right"><a class="btn btn-lg btn-success" href="#" role="button">Visualize</a></p>
+        <form id="form1">
+            <textarea style="height:200px;" name="crontab" class="form-control"><?php echo (isset($_REQUEST['crontab']) ? $_REQUEST['crontab'] : '');?></textarea>
+            <br/>
+            <p style="float:right"><a class="btn btn-lg btn-success" href="#" role="button" onclick="$('#form1').submit();">Visualize</a></p>
+        </form>
         <br clear="all">
       </div>
 
     </div> <!-- /container -->
+
+    <?php if (isset($prettyCron) && $prettyCron instanceof PrettyCron && count($prettyCron->getCronLines()) > 0): ?>
+        <div class="container">
+            <h1><span class="glyphicon glyphicon-time"></span> &nbsp;<span style="position:relative;top:-2px;">Schedule</span></h1>
+            <table  class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Last Run</th>
+                        <th>Next Run</th>
+                    </tr>
+                </thead>
+                <tbody>
+            <?php foreach ($prettyCron->getCronLinesByDate() as $cronLine): ?>
+                <?php if ($cronLine['cron_expression'] instanceof \Cron\CronExpression): ?>
+                        <?php try { ?>
+                            <tr>
+                                <td><?php echo $cronLine['crontab_line']; ?></td>
+                                <td><?php echo $cronLine['cron_expression']->getPreviousRunDate()->format('Y-m-d H:i:s');?></td>
+                                <td><?php echo $cronLine['cron_expression']->getNextRunDate()->format('Y-m-d H:i:s');?></td>
+                            </tr>
+                        <?php } catch (Exception $e) {} ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+    <?php endif; ?>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="vendor/components/jquery/jquery.js"></script>

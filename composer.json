@@ -9,6 +9,7 @@
     ],
     "require": {
         "components/jquery": "2.0.3",
-        "twitter/bootstrap": "v3.0.3"
+        "twitter/bootstrap": "v3.0.3",
+        "mtdowling/cron-expression": "1.0.*"
     }
 }
