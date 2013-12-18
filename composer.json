@@ -1,0 +1,14 @@
+{
+    "name": "jrbradley/prettycron",
+    "description": "Pretty Cron",
+    "authors": [
+        {
+            "name": "thebra",
+            "email": "jason.bradley@gmail.com"
+        }
+    ],
+    "require": {
+        "components/jquery": "2.0.3",
+        "twitter/bootstrap": "v3.0.3"
+    }
+}
