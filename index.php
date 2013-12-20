@@ -1,5 +1,4 @@
 <?php
-    ini_set('display_errors',1);
     if (isset($_REQUEST['crontab']) && $_REQUEST['crontab'] != '') {
         require_once('./lib/PrettyCron.php');
         $prettyCron = new PrettyCron($_REQUEST['crontab']);
@@ -61,6 +60,17 @@
     });
 
     </script>
+
+    <style>
+       #placeholder div.xAxis div.tickLabel
+        {
+            -webkit-transform: matrix(0.868,-0.497,0.497,0.868,-22.549,15.839);
+            -moz-transform: matrix(0.868,-0.497,0.497,0.868,-22.549px,15.839px);
+            -ms-transform: matrix(0.868,-0.497,0.497,0.868,-22.549,15.839);
+            -o-transform: matrix(0.868,-0.497,0.497,0.868,-22.549,15.839);
+            transform: matrix(0.868,-0.497,0.497,0.868,-22.549,15.839);
+        }
+    </style>
   </head>
   <body>
 
@@ -77,7 +87,7 @@
       <div class="jumbotron">
         <h1>Visualize Your Cron</h1>
         <p class="lead">Paste your crontab and hit visualize.</p>
-        <form id="form1">
+        <form id="form1" method="POST">
             <textarea style="height:150px;" name="crontab" class="form-control"><?php echo (isset($_REQUEST['crontab']) ? $_REQUEST['crontab'] : '');?></textarea>
             <br/>
             <p style="float:right"><a class="btn btn-lg btn-success" href="#" role="button" onclick="$('#form1').submit();">Visualize</a></p>
@@ -113,7 +123,7 @@
                 <?php if ($cronLine['cron_expression'] instanceof \Cron\CronExpression): ?>
                         <?php try { ?>
                             <tr>
-                                <td><?php echo $cronLine['crontab_line']; ?></td>
+                                <td><?php echo substr($cronLine['crontab_line'],0, 120); ?></td>
                                 <td><?php echo $cronLine['cron_expression']->getPreviousRunDate()->format('Y-m-d H:i:s');?></td>
                                 <td><?php echo $cronLine['cron_expression']->getNextRunDate()->format('Y-m-d H:i:s');?></td>
                             </tr>
