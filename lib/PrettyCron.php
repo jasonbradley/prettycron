@@ -78,4 +78,31 @@ class PrettyCron {
 
         return $sorted;
     }
+
+    public function getGroupedByTimeDay() {
+        $grouped = array();
+
+        foreach ($this->cronLines as $index => $cronLine) {
+            if ($cronLine['cron_expression'] instanceof \Cron\CronExpression) {
+                try {
+                    if (!isset($grouped[$cronLine['cron_expression']->getNextRunDate()->format('Y-m-d H:i:s')])) {
+                        $grouped[$cronLine['cron_expression']->getNextRunDate()->format('Y-m-d H:i:s')] = array('count' => 0,
+                                                                                                                'time' => $cronLine['cron_expression']->getNextRunDate()->format('H:i:s'));
+                    }
+
+                    $grouped[$cronLine['cron_expression']->getNextRunDate()->format('Y-m-d H:i:s')]['count']++;
+                } catch (Exception $e) {}
+            }
+        }
+
+        ksort($grouped);
+
+        //reindex
+        $reindexedGrouped = array();
+        foreach ($grouped as $g) {
+            $reindexedGrouped[] = $g;
+        }
+
+        return $reindexedGrouped;
+    }
 }
