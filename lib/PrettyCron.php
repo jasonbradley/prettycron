@@ -46,6 +46,11 @@ class PrettyCron {
     protected function getDateTime($line) {
         $characters = explode(" ", $line);
 
+        // If this is a predefined scheduling definition, just return as is
+        // CronExpression knows how to handle these
+        if (substr($characters[0], 0, 1) == '@')
+            return trim($characters[0]);
+
         $dateTime = "";
 
         if (count($characters) >= 4 && trim($characters[0]) !== '#') {
