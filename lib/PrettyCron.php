@@ -2,11 +2,12 @@
 
 require_once 'vendor/autoload.php';
 
-class PrettyCron {
-
+class PrettyCron
+{
     protected $cronLines = array();
 
-    public function __construct($crontab) {
+    public function __construct($crontab)
+    {
         if ($crontab != '') {
             $crontabLines = $this->getLines($crontab);
 
@@ -26,14 +27,16 @@ class PrettyCron {
     /**
      * Build array of lines from the crontab string
      *
-     * @param type $crontab
+     * @param  type  $crontab
      * @return array
      */
-    protected function getLines($crontab) {
+    protected function getLines($crontab)
+    {
         return explode(PHP_EOL, $crontab);
     }
 
-    protected function getCronExpression($line) {
+    protected function getCronExpression($line)
+    {
         $cronLine = "";
 
         try {
@@ -43,7 +46,8 @@ class PrettyCron {
         return $cronLine;
     }
 
-    protected function getDateTime($line) {
+    protected function getDateTime($line)
+    {
         $characters = explode(" ", $line);
 
         // If this is a predefined scheduling definition, just return as is
@@ -64,11 +68,13 @@ class PrettyCron {
         return $dateTime;
     }
 
-    public function getCronLines() {
+    public function getCronLines()
+    {
         return $this->cronLines;
     }
 
-    public function getCronLinesByDate() {
+    public function getCronLinesByDate()
+    {
         $sorted = array();
 
         foreach ($this->cronLines as $index => $cronLine) {
@@ -84,7 +90,8 @@ class PrettyCron {
         return $sorted;
     }
 
-    public function getGroupedByTimeDay() {
+    public function getGroupedByTimeDay()
+    {
         $grouped = array();
 
         foreach ($this->cronLines as $index => $cronLine) {
